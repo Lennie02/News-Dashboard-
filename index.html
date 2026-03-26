@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Update</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 6 L14 6 L14 20 L6 26 Z" fill="currentColor"/>
+          <path d="M16 6 L26 6 L26 26 L16 26 Z" fill="currentColor" opacity="0.5"/>
+        </svg>
+        <span class="logo-text">The Update</span>
+      </div>
+    </div>
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link active" data-category="general">Top Stories</a></li>
+        <li><a href="#" class="nav-link" data-category="technology">Tech</a></li>
+        <li><a href="#" class="nav-link" data-category="business">Business</a></li>
+        <li><a href="#" class="nav-link" data-category="science">Science</a></li>
+        <li><a href="#" class="nav-link" data-category="health">Health</a></li>
+        <li><a href="#" class="nav-link" data-category="sports">Sports</a></li>
+        <li><a href="#" class="nav-link" data-category="entertainment">Culture</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="theme-icon sun">☀️</span>
+        <span class="theme-icon moon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-date" id="heroDate"></p>
+      <h1 class="hero-headline">Discover,<br/><span class="hero-sub">for yourself.</span></h1>
+      <div class="search-bar">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search for any topic..." autocomplete="off" />
+        <button class="search-btn" id="searchBtn">Search</button>
+      </div>
+      <div class="search-suggestions" id="searchSuggestions">
+        <span class="suggestion-tag" data-query="artificial intelligence">AI</span>
+        <span class="suggestion-tag" data-query="climate change">Climate</span>
+        <span class="suggestion-tag" data-query="economy">Economy</span>
+        <span class="suggestion-tag" data-query="space exploration">Space</span>
+        <span class="suggestion-tag" data-query="elections">Elections</span>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="last-viewed-label">Last viewed</div>
+      <div class="last-viewed-card" id="lastViewedCard">
+        <div class="last-viewed-image" id="lastViewedImage">
+          <div class="lv-placeholder">
+            <span>No article viewed yet</span>
+          </div>
+        </div>
+        <div class="last-viewed-info" id="lastViewedInfo">
+          <p class="lv-title" id="lvTitle">Start reading to track your history</p>
+          <p class="lv-source" id="lvSource"></p>
+          <div class="lv-progress-bar"><div class="lv-progress-fill" id="lvProgress"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FILTER BAR ===== -->
+  <section class="filter-bar">
+    <div class="filter-left">
+      <span class="section-label" id="sectionLabel">Recent</span>
+      <span class="article-count" id="articleCount"></span>
+    </div>
+    <div class="filter-right">
+      <select class="sort-select" id="sortSelect">
+        <option value="publishedAt">Latest First</option>
+        <option value="relevancy">Most Relevant</option>
+        <option value="popularity">Most Popular</option>
+      </select>
+      <div class="view-toggle">
+        <button class="view-btn active" id="gridViewBtn" aria-label="Grid view">
+          <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+        </button>
+        <button class="view-btn" id="listViewBtn" aria-label="List view">
+          <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="14" height="2" rx="1"/><rect x="1" y="7" width="14" height="2" rx="1"/><rect x="1" y="12" width="14" height="2" rx="1"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LOADING STATE ===== -->
+  <div class="loading-container" id="loadingContainer">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Fetching the latest stories...</p>
+  </div>
+
+  <!-- ===== ERROR STATE ===== -->
+  <div class="error-container" id="errorContainer" style="display:none;">
+    <div class="error-icon">📡</div>
+    <h3 class="error-title">Couldn't load articles</h3>
+    <p class="error-message" id="errorMessage">Something went wrong. Please try again.</p>
+    <button class="retry-btn" id="retryBtn">Try Again</button>
+  </div>
+
+  <!-- ===== EMPTY STATE ===== -->
+  <div class="empty-container" id="emptyContainer" style="display:none;">
+    <div class="empty-icon">🔍</div>
+    <h3 class="empty-title">No results found</h3>
+    <p class="empty-message">Try a different search term or category.</p>
+  </div>
+
+  <!-- ===== NEWS GRID ===== -->
+  <main class="news-grid" id="newsGrid"></main>
+
+  <!-- ===== PAGINATION ===== -->
+  <div class="pagination" id="pagination" style="display:none;">
+    <button class="page-btn" id="prevPage" disabled>← Previous</button>
+    <span class="page-info" id="pageInfo">Page 1</span>
+    <button class="page-btn" id="nextPage">Next →</button>
+  </div>
+
+  <!-- ===== ARTICLE MODAL ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="articleModal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-image-wrap">
+        <img class="modal-image" id="modalImage" src="" alt="" />
+        <div class="modal-category-badge" id="modalCategory"></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta">
+          <span class="modal-source" id="modalSource"></span>
+          <span class="modal-dot">·</span>
+          <span class="modal-date" id="modalDate"></span>
+        </div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+        <a class="modal-readmore" id="modalLink" href="#" target="_blank" rel="noopener noreferrer">
+          Read Full Article →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <p>© 2025 The Update · Powered by <a href="https://newsapi.org" target="_blank">NewsAPI</a> · Built for ALX</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
