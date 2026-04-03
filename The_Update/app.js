@@ -2,14 +2,12 @@
  * THE UPDATE — app.js
  * News Aggregator — Full Functionality
  * Uses NewsAPI (newsapi.org)
- *
- * IMPORTANT: Replace API_KEY below with your own key from https://newsapi.org/register
- * For deployment on a server, move the API key to a backend proxy to keep it secure.
+ * 
  */
 
 // ─── CONFIG ─────────────────────────────────────────────────────────────────
 const CONFIG = {
-  API_KEY: "YOUR_NEWSAPI_KEY_HERE",   // <-- Replace with your NewsAPI key
+  API_KEY: "ee879ec2bf2a417e8f23bf9383477893",   
   BASE_URL: "https://newsapi.org/v2",
   PAGE_SIZE: 9,
   DEFAULT_CATEGORY: "general",
@@ -71,7 +69,7 @@ const dom = {
 // ─── UTILITIES ───────────────────────────────────────────────────────────────
 
 /**
- * Format a date string into a readable relative/absolute label.
+ * Date string formatting
  */
 function formatDate(dateStr) {
   if (!dateStr) return "";
@@ -87,7 +85,7 @@ function formatDate(dateStr) {
 }
 
 /**
- * Estimate reading time from description/content text.
+ * Estimate reading time based on word count 
  */
 function readingTime(text) {
   if (!text) return "1 min read";
@@ -98,7 +96,7 @@ function readingTime(text) {
 }
 
 /**
- * Returns a category emoji icon.
+ * Category emoji icon.
  */
 function categoryIcon(cat) {
   const icons = {
@@ -114,7 +112,7 @@ function categoryIcon(cat) {
 }
 
 /**
- * Build a cache key from params.
+ * Cache key from params.
  */
 function cacheKey(params) {
   return JSON.stringify(params);
@@ -191,7 +189,7 @@ async function fetchTopHeadlines(category = "general", page = 1) {
     country: CONFIG.DEFAULT_COUNTRY,
     pageSize: CONFIG.PAGE_SIZE,
     page,
-    apiKey: CONFIG.API_KEY,
+
   };
 
   const key = cacheKey(params);
@@ -199,12 +197,12 @@ async function fetchTopHeadlines(category = "general", page = 1) {
     return state.cache[key].data;
   }
 
-  const url = new URL(`${CONFIG.BASE_URL}/top-headlines`);
+  const url = new URL(`/api/top-headlines`, window.location.origin);
   url.searchParams.set("country",  CONFIG.DEFAULT_COUNTRY);
   url.searchParams.set("category", category);
   url.searchParams.set("pageSize", CONFIG.PAGE_SIZE);
   url.searchParams.set("page",     page);
-  url.searchParams.set("apiKey",   CONFIG.API_KEY);
+  
 
   const res  = await fetch(url.toString());
   const data = await res.json();
@@ -228,13 +226,13 @@ async function fetchSearch(query, page = 1, sortBy = "publishedAt") {
     return state.cache[key].data;
   }
 
-  const url = new URL(`${CONFIG.BASE_URL}/everything`);
+  const url = new URL(`/api/search`, window.location.origin);
   url.searchParams.set("q",        query);
   url.searchParams.set("pageSize", CONFIG.PAGE_SIZE);
   url.searchParams.set("page",     page);
   url.searchParams.set("sortBy",   sortBy);
   url.searchParams.set("language", "en");
-  url.searchParams.set("apiKey",   CONFIG.API_KEY);
+  
 
   const res  = await fetch(url.toString());
   const data = await res.json();
@@ -268,7 +266,7 @@ function buildCard(article, index) {
 
   const hasImage = article.urlToImage && !article.urlToImage.includes("None");
   const imgHTML  = hasImage
-    ? `<img class="card-image" src="${escapeHtml(article.urlToImage)}" alt="${escapeHtml(article.title || "")}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\"card-image-placeholder\\"><span>${categoryIcon(state.currentCategory)}</span></div>'" />`
+    ? `<img class="card-image" src="${escapeHtml(article.urlToImage)}" alt="" loading="lazy" onerror="this.style.display='none'" />`
     : `<div class="card-image-placeholder"><span>${categoryIcon(state.currentCategory)}</span></div>`;
 
   card.innerHTML = `
