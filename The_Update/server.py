@@ -1,35 +1,30 @@
 """
 THE UPDATE — server.py
-Python Flask backend that proxies NewsAPI requests,
-keeping the API key secure on the server side.
-
-SETUP:
-  1. pip install flask flask-cors requests python-dotenv
-  2. Create a .env file with:  NEWS_API_KEY=ee879ec2bf2a417e8f23bf9383477893
-  3. Run:  python3 server.py
-  4. Open: http://localhost:5000
+  NEWS_API_KEY=ee879ec2bf2a417e8f23bf9383477893
+  URL= http://localhost:5000
 
 """
 
 import os
 import time
 import requests
+from functools import wraps
 from flask import Flask, jsonify, request, send_from_directory, abort
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-# ─── Load environment variables ───────────────────────────────────────────────
+# Load environment variables 
 load_dotenv()
 
 API_KEY  = os.getenv("NEWS_API_KEY", "")          # Set in .env file
 BASE_URL = "https://newsapi.org/v2"
 CACHE_TTL = 300   # 5 minutes in seconds
 
-# ─── App Setup ────────────────────────────────────────────────────────────────
+# App Setup 
 app = Flask(__name__, static_folder=".", static_url_path="")
 CORS(app)   # Enable Cross-Origin Resource Sharing
 
-# ─── Simple In-Memory Cache ───────────────────────────────────────────────────
+# Simple In-Memory Cache 
 _cache = {}
 
 def get_cache(key):
@@ -44,7 +39,7 @@ def set_cache(key, data):
     """Store data in cache with current timestamp."""
     _cache[key] = (data, time.time())
 
-# ─── Input Validation ─────────────────────────────────────────────────────────
+# Input Validation 
 
 ALLOWED_CATEGORIES = {
     "general", "technology", "business", "science", "health", "sports", "entertainment"
@@ -66,7 +61,7 @@ def safe_int(val, default=1, min_val=1, max_val=100):
     except (TypeError, ValueError):
         return default
 
-# ─── Routes ───────────────────────────────────────────────────────────────────
+# Routes 
 
 @app.route("/")
 def index():
@@ -218,7 +213,7 @@ def health_check():
     return jsonify({"status": "ok", "service": "The Update"}), 200
 
 
-# ─── Error Handlers ───────────────────────────────────────────────────────────
+# Error Handlers 
 
 @app.errorhandler(404)
 def not_found(e):
@@ -233,7 +228,7 @@ def server_error(e):
     return jsonify({"status": "error", "message": "Internal server error."}), 500
 
 
-# ─── Run ──────────────────────────────────────────────────────────────────────
+# Run 
 
 if __name__ == "__main__":
     if not API_KEY:

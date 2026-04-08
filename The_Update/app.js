@@ -1,21 +1,14 @@
-/**
- * THE UPDATE — app.js
- * News Aggregator — Full Functionality
- * Uses NewsAPI (newsapi.org)
- * 
- */
-
-// ─── CONFIG ─────────────────────────────────────────────────────────────────
+// CONFIG 
 const CONFIG = {
   API_KEY: "ee879ec2bf2a417e8f23bf9383477893",   
   BASE_URL: "https://newsapi.org/v2",
   PAGE_SIZE: 9,
   DEFAULT_CATEGORY: "general",
   DEFAULT_COUNTRY: "us",
-  CACHE_TTL: 5 * 60 * 1000,          // 5 minutes
+  CACHE_TTL: 5 * 60 * 1000,          
 };
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
+// STATE 
 const state = {
   articles: [],
   currentPage: 1,
@@ -28,7 +21,7 @@ const state = {
   cache: {},
 };
 
-// ─── DOM REFS ────────────────────────────────────────────────────────────────
+// DOM REFS 
 const dom = {
   newsGrid:          () => document.getElementById("newsGrid"),
   loadingContainer:  () => document.getElementById("loadingContainer"),
@@ -66,10 +59,10 @@ const dom = {
   toast:             () => document.getElementById("toast"),
 };
 
-// ─── UTILITIES ───────────────────────────────────────────────────────────────
+//UTILITIES 
 
 /**
- * Date string formatting
+ * Date string 
  */
 function formatDate(dateStr) {
   if (!dateStr) return "";
@@ -128,7 +121,7 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 2800);
 }
 
-// ─── THEME ───────────────────────────────────────────────────────────────────
+// THEME 
 
 function initTheme() {
   const saved = localStorage.getItem("the_update_theme") || "light";
@@ -142,7 +135,7 @@ function toggleTheme() {
   localStorage.setItem("the_update_theme", next);
 }
 
-// ─── LAST VIEWED ─────────────────────────────────────────────────────────────
+// LAST VIEWED 
 
 function saveLastViewed(article) {
   state.lastViewed = article;
@@ -177,7 +170,7 @@ function renderLastViewed() {
   dom.lastViewedCard().onclick = () => openModal(lv);
 }
 
-// ─── API CALLS ───────────────────────────────────────────────────────────────
+// API CALLS 
 
 /**
  * Fetch top headlines by category.
@@ -245,7 +238,7 @@ async function fetchSearch(query, page = 1, sortBy = "publishedAt") {
   return data;
 }
 
-// ─── RENDER ARTICLES ─────────────────────────────────────────────────────────
+//  RENDER ARTICLES 
 
 function renderArticles(articles) {
   const grid = dom.newsGrid();
@@ -305,7 +298,7 @@ function escapeHtml(str) {
     .replace(/'/g, "&#039;");
 }
 
-// ─── MODAL ───────────────────────────────────────────────────────────────────
+// MODAL
 
 function openModal(article) {
   saveLastViewed(article);
@@ -344,7 +337,7 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
-// ─── LOADING / ERROR STATES ──────────────────────────────────────────────────
+// LOADING / ERROR STATES 
 
 function showLoading() {
   dom.loadingContainer().style.display = "flex";
@@ -370,7 +363,7 @@ function showEmpty() {
   dom.emptyContainer().style.display = "flex";
 }
 
-// ─── LOAD NEWS ───────────────────────────────────────────────────────────────
+//LOAD NEWS 
 
 async function loadNews(options = {}) {
   const {
@@ -446,7 +439,7 @@ function capitalize(str) {
   return str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
 }
 
-// ─── PAGINATION ───────────────────────────────────────────────────────────────
+// PAGINATION 
 
 function updatePagination(totalResults, page) {
   const totalPages = Math.ceil(totalResults / CONFIG.PAGE_SIZE);
@@ -463,7 +456,7 @@ function updatePagination(totalResults, page) {
   dom.pageInfo().textContent = `Page ${page} of ${Math.min(totalPages, 100)}`; // NewsAPI caps at 100
 }
 
-// ─── SEARCH ──────────────────────────────────────────────────────────────────
+// SEARCH 
 
 function handleSearch() {
   const q = dom.searchInput().value.trim();
@@ -481,7 +474,7 @@ function handleSearch() {
   loadNews({ query: q, page: 1, sort: state.currentSort });
 }
 
-// ─── EVENT LISTENERS ─────────────────────────────────────────────────────────
+// EVENT LISTENERS 
 
 function bindEvents() {
   // Theme toggle
@@ -612,7 +605,7 @@ function bindEvents() {
   });
 }
 
-// ─── MOBILE NAV ──────────────────────────────────────────────────────────────
+// MOBILE NAV 
 
 function buildMobileNav() {
   const categories = [
@@ -668,7 +661,7 @@ function closeMobileMenu() {
   if (btn) btn.innerHTML = "☰";
 }
 
-// ─── HERO DATE ───────────────────────────────────────────────────────────────
+// HERO DATE 
 
 function setHeroDate() {
   const now = new Date();
@@ -677,7 +670,7 @@ function setHeroDate() {
   });
 }
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
+// INIT 
 
 function init() {
   initTheme();
