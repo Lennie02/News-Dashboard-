@@ -9,13 +9,13 @@ A clean, fully responsive news dashboard with light/dark mode, search, category 
 ```
 News-Dashboard-/
 ├── .gitignore
+├── README.md
 └── The_Update/
 ├── index.html
 ├── style.css
 ├── app.js
 ├── server.py
-├── .env
-└── README.md
+└── .env
 ```
 
 ---
