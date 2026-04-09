@@ -163,6 +163,6 @@ sudo stystemctl restart haproxy
 ## Demo video
 A video showcasing how the Application works
 
-Youtube Link = ``
+Youtube Link = https://youtu.be/wHWwmu7gnZ4
 
 *Built for the ALU APIs Assignment — March 2026*
